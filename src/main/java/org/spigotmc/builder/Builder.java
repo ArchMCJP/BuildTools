@@ -196,9 +196,9 @@ public class Builder
         {
             if ( IS_WINDOWS )
             {
-                String gitVersion = "PortableGit-2.30.0-" + ( System.getProperty( "os.arch" ).endsWith( "64" ) ? "64" : "32" ) + "-bit";
+                String gitVersion = "PortableGit-2.34.1-" + ( System.getProperty( "os.arch" ).endsWith( "64" ) ? "64" : "32" ) + "-bit";
                 // https://github.com/git-for-windows/git/releases/tag/v2.30.0.windows.1
-                String gitHash = System.getProperty( "os.arch" ).endsWith( "64" ) ? "6497e30fc6141e3c27af6cc3a081861043a7666dd54f395d47184e8eb75f5d61" : "b3768c64b6afa082043659c56acb4c3483df6b6e884fdc7e3c769f7e7e99a3a8";
+                String gitHash = System.getProperty( "os.arch" ).endsWith( "64" ) ? "dbf63703f7a37a374591450f1b1466b83ceccb724067521786bf8c5f69ed3ced" : "95e198aaf6e6455910facfc522f7981934822fb362f6605375751b8a9c62db55";
                 msysDir = new File( gitVersion, "PortableGit" );
 
                 if ( !msysDir.isDirectory() )
@@ -212,7 +212,7 @@ public class Builder
 
                     if ( !gitInstall.exists() )
                     {
-                        download( "https://github.com/git-for-windows/git/releases/download/v2.30.0.windows.1/" + gitName, gitInstall, HashFormat.SHA256, gitHash );
+                        download( "https://github.com/git-for-windows/git/releases/download/v2.34.1.windows.1/" + gitName, gitInstall, HashFormat.SHA256, gitHash );
                     }
 
                     System.out.println( "Extracting downloaded git install" );
@@ -263,31 +263,33 @@ public class Builder
         File bukkit = new File( "Bukkit" );
         if ( !bukkit.exists() || !containsGit( bukkit ) )
         {
-            clone( "https://hub.spigotmc.org/stash/scm/spigot/bukkit.git", bukkit );
+            clone( "https://github.com/ArchMCJP/Bukkit.git", bukkit );
         }
 
         File craftBukkit = new File( "CraftBukkit" );
         if ( !craftBukkit.exists() || !containsGit( craftBukkit ) )
         {
-            clone( "https://hub.spigotmc.org/stash/scm/spigot/craftbukkit.git", craftBukkit );
+            clone( "https://github.com/ArchMCJP/craftbukkit.git", craftBukkit );
         }
 
         File spigot = new File( "Spigot" );
         if ( !spigot.exists() || !containsGit( spigot ) )
         {
-            clone( "https://hub.spigotmc.org/stash/scm/spigot/spigot.git", spigot );
+            clone( "https://github.com/ArchMCJP/ArgotPaper.git", spigot );
         }
 
         File buildData = new File( "BuildData" );
         if ( !buildData.exists() || !containsGit( buildData ) )
         {
-            clone( "https://hub.spigotmc.org/stash/scm/spigot/builddata.git", buildData );
+            clone( "https://github.com/ArchMCJP/BuildData.git", buildData );
         }
 
         String m2Home = System.getenv( "M2_HOME" );
         if ( m2Home == null || !( maven = new File( m2Home ) ).exists() )
         {
-            String mavenVersion = "apache-maven-3.6.0";
+            String mavenVersinNo = "3.8.4";
+            String mavenVersion = "apache-maven-" + mavenVersinNo;
+            String mavenVersionHash = "bcd1e99548ac8a5b9ec159ee16c23d29d6799696c92140d583d25eb323433aadcc0b47c45b0b6bd9dbcf344bbba38b56dd056a9c49ae714cfc22dc06bb4a4230"
             maven = new File( mavenVersion );
 
             if ( !maven.exists() )
@@ -298,7 +300,7 @@ public class Builder
                 mvnTemp.deleteOnExit();
 
                 // https://www.apache.org/dist/maven/maven-3/3.6.0/binaries/apache-maven-3.6.0-bin.zip.sha512
-                download( "https://static.spigotmc.org/maven/" + mvnTemp.getName(), mvnTemp, HashFormat.SHA512, "7d14ab2b713880538974aa361b987231473fbbed20e83586d542c691ace1139026f232bd46fdcce5e8887f528ab1c3fbfc1b2adec90518b6941235952d3868e9" );
+                download( "https://archive.apache.org/dist/maven/maven-3/" + mavenVersionNo + "/binaries/" + mvnTemp.getName(), mvnTemp, HashFormat.SHA512, mavenVersionHash );
                 unzip( mvnTemp, new File( "." ) );
                 mvnTemp.delete();
             }
@@ -319,7 +321,7 @@ public class Builder
                 String verInfo;
                 try
                 {
-                    verInfo = get( "https://hub.spigotmc.org/versions/" + askedVersion + ".json" );
+                    verInfo = get( "https://raw.githubusercontent.com/ArchMCJP/VersionInfo/main/" + askedVersion + ".json" );
                 } catch ( IOException ex )
                 {
                     System.err.println( "Could not get version " + askedVersion + " does it exist? Try another version or use 'latest'" );
